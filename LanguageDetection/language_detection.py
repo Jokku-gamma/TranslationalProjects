@@ -1,7 +1,5 @@
 import whisper
 import numpy as np
-import sounddevice as sd
-import scipy.io.wavfile as wavfile
 from datetime import datetime
 from flask import Flask,request,jsonify
 from transformers import pipeline
@@ -14,13 +12,7 @@ SAMPLE_RATE=16000
 DURATION=10
 OUTPUT_FILE="recorded_audio.wav"
 translator = pipeline("translation", model="Helsinki-NLP/opus-mt-mul-en",token=os.environ.get("HUGGING_FACE_AUTH_TOKEN"))
-def record():
-    print(f"Recording for {DURATION} seconds")
-    audio=sd.rec(int(DURATION * SAMPLE_RATE),samplerate=SAMPLE_RATE,channels=1)
-    sd.wait()
-    wavfile.write(OUTPUT_FILE,SAMPLE_RATE,audio)
-    print("Recording finished")
-    return OUTPUT_FILE
+
 
 def detect(audio_path):
     audio=whisper.load_audio(audio_path)
